@@ -9,7 +9,8 @@ var config = {
     upload: {
         path: path.join(__dirname, 'public/images'),
         url: '/public/upload',
-        uploadurl: 'http://120.27.94.166:2999'
+        uploadurl: 'http://120.27.94.166:2999/'
+        // uploadurl: 'http://localhost:2999/'
     },
     
     host: "from office",

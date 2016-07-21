@@ -30,13 +30,13 @@ LaiFeng.prototype.start = function () {
             return console.log(roomid + "很抱歉，您所访问的页面未能找到或出现了未知错误！");
         }
         if (body.indexOf("token") < 0) {
-            return console.log(roomid + ' 主播现在不在，无弹窗消息');
+            return console.log(roomid + ' 主播现在不在，无弹窗消息 ');//
         }
 
         token = body.substring(body.indexOf("token") + 7, body.indexOf("token") + 84);
         touristId = body.substring(body.indexOf("touristId:'") + 11, body.indexOf("touristId:'") + 21);
-        console.log(roomid + ": " + token + ' ' + token.length);
-        console.log("touristId: " + touristId);
+        // console.log(roomid + ": " + token + ' ' + token.length);
+        // console.log("touristId: " + touristId);
 
         // token=token.replace("MA==","");
 
@@ -57,7 +57,7 @@ LaiFeng.prototype.start = function () {
             var values = [];
 
             var WebSocketClient = require('websocket').client;
-            console.log(roomid + ": " + host);
+            // console.log(roomid + ": " + host);
 
             var client = new WebSocketClient();
 
@@ -76,8 +76,8 @@ LaiFeng.prototype.start = function () {
                 });
                 connection.on('message', function (message) {
                     if (message.type === 'utf8') {
-                        console.log("-----------------" + roomid +
-                            "------------------" + message.utf8Data);
+                        // console.log("-----------------" + roomid +
+                        //     "------------------" + message.utf8Data);
                         var utf8Data = message.utf8Data;
                         // var data = utf8Data.substring(4);
                         if (utf8Data.indexOf('0:::') == 0) {
@@ -113,16 +113,21 @@ LaiFeng.prototype.start = function () {
                                 case "sendStar":
                                 case "sendBigGift":
                                 case "globalHornMessage":
-                                    values.push(roomid,'laifeng', data);
+                                case "sendGift":
+                                {
+                                    data.ctime = new Date().getTime();
+                                    values.push(data);
+                                    if (values.length > 20) {
+                                        upload.uploadServe(roomid, 'laifeng', values);
+                                        values = [];
+                                    }
+                                }
                                     break;
-                                default:    
+                                default:
                                     break;
                             }
-                            if(values.length>20){
-                                upload.uploadServe(roomid,'laifeng', data);
-                                values = [];
-                            }
-                            console.log("data");
+
+                            // console.log("data");
                         }
 
                         /* var data = JSON.parse(utf8Data);
