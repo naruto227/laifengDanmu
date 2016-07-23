@@ -53,7 +53,7 @@ LaiFeng.prototype.start = function () {
             }
             var data = JSON.parse(body);
             host = data.host;
-
+            console.log(host);
             var values = [];
 
             var WebSocketClient = require('websocket').client;
