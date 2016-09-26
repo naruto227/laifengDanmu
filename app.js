@@ -6,8 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var eventEmitter = require('events').EventEmitter;
 var myEvents = new eventEmitter();
+var cheerio = require('cheerio');
+
 var schedule = require('node-schedule');
 var rule = new schedule.RecurrenceRule();
+var rule1 = new schedule.RecurrenceRule();
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
@@ -64,13 +67,13 @@ app.use(function (err, req, res, next) {
 });
 
 var rooms = [];
-var times = [];
-myEvents.on("laifeng", function (room) {
+ var times = [];
+ myEvents.on("laifeng", function (room) {
     new lf(room);
 });
-request('http://120.27.94.166:2999/getRooms?platform=laifeng&topn=' + config.topn, function (error, response, body) {
+ request('http://120.27.94.166:2999/getRooms?platform=laifeng&topn=' + config.topn, function (error, response, body) {
     if (error) {
-        return console.log(error)
+        return console.log(error);
     }
     var parse = JSON.parse(body);
     for (var i = 0; i < parse.data.length; i++) {
@@ -94,7 +97,73 @@ request('http://120.27.94.166:2999/getRooms?platform=laifeng&topn=' + config.top
     });
 
 });
+/*var times1 = [];
+rule1.hour = times1;
+for (var i = 0; i < 24; i = i + 4) {
+    times1.push(i);
+}
+// schedule.scheduleJob(rule1, function () {
+//     console.log(new Date());
 
+    var options = {
+        method: 'GET',
+        url: 'http://www.laifeng.com/center',
+        qs: {pageNo: '1'},
+    };
 
+    request(options, function (error, response, body) {
+        if (error) return console.log(error.message);
+        var $ = cheerio.load(body);
+        var name = $(".user-list .name a").toArray();
+        var rooms = [];
+        for (var i = 0; i < name.length; i++) {
+            var href = name[i].attribs.href;
+            var room_id = href.substring(21, href.length);
+            rooms.push(room_id);
+        }
+        console.log("rooms:" + rooms);
+        // if (rooms.length >= 120) {
+
+        /!*var options1 = {
+            method: 'POST',
+            url: 'http://120.27.94.166:2999/insertCR',
+            body: {
+                platform: 'laifeng',
+                rooms: rooms
+            },
+            json: true
+        };
+
+        request(options1, function (error, response, body) {
+            if (error)  return console.log(error.message);
+
+            console.log(body);
+        });*!/
+        var times = [];
+
+        // myEvents.on("laifeng", function (room) {
+        // });
+
+        for (var i = 0; i < 60; i++) {
+            times.push(i);
+        }
+        rule.second = times;
+        // console.log("-------------");
+        var count = 0;
+        schedule.scheduleJob(rule, function () {
+            if (count >= rooms.length) {
+                this.cancel();
+                rooms = [];
+                return;
+            }
+            new lf(rooms[count++]);
+
+            // myEvents.emit("laifeng", rooms[count++]);
+        });
+
+        // }
+        // console.log(body);
+    });*/
+// });
 
 module.exports = app;

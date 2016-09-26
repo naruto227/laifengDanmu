@@ -25,15 +25,21 @@ LaiFeng.prototype.start = function () {
         if (err) {
             return console.log(err);
         }
+        // console.log(body);
         var str = body.substring(body.indexOf("<title>") + 7, body.indexOf("<title>") + 13);
         if ("我们非常抱歉" == str) {
             return console.log(roomid + "很抱歉，您所访问的页面未能找到或出现了未知错误！");
         }
-        if (body.indexOf("token") < 0) {
-            return console.log(roomid + ' 主播现在不在，无弹窗消息 ');//
-        }
-
-        token = body.substring(body.indexOf("token") + 7, body.indexOf("token") + 84);
+        // if (body.indexOf("token") < 0) {
+        //     return console.log(roomid + ' 主播现在不在，无弹窗消息 ');//
+        // }
+        //token = response.headers["set-cookie"]["8"].substring(0,response.headers["set-cookie"]["8"].indexOf(";"));
+        //imk=MTg3ODA1NzgzMy0wLTE0NzQ4NzI3MzQ3NzctMTQ3NDk1OTEzNDc3Nw%3D%3D-E7E65C124EE9B0198EE2AC69BFCD557F
+        //imk=MTg3ODA1NzgzMy0wLTE0NzQ4NzI3MzQ3NzctMTQ3NDk1OTEzNDc3Nw%3D%3D-E7E65C124EE9B0198EE2AC69BFCD557F
+//imk=MTc2NDgzNjkwNC0wLTE0NzQ4NzI1NzE4MTgtMTQ3NDk1ODk3MTgxOA%3D%3D-1FA9A3F18DD7D3F942C63D5347171C68; Domain=.laifeng.com; Expires=Sun, 21-Sep-2036 06:49:31 GMT; Path=/
+//         token = body.substring(body.indexOf("token") + 7, body.indexOf("token") + 84);
+        token = response.headers["set-cookie"]["8"].substring(4,response.headers["set-cookie"]["8"].indexOf(";")).replace("%3D%3D","==");
+        // token=token.replace("%3D%3D","==");
         touristId = body.substring(body.indexOf("touristId:'") + 11, body.indexOf("touristId:'") + 21);
         // console.log(roomid + ": " + token + ' ' + token.length);
         // console.log("touristId: " + touristId);
@@ -53,7 +59,7 @@ LaiFeng.prototype.start = function () {
             }
             var data = JSON.parse(body);
             host = data.host;
-            console.log(host);
+            // console.log(host);
             var values = [];
 
             var WebSocketClient = require('websocket').client;
@@ -117,7 +123,7 @@ LaiFeng.prototype.start = function () {
                                 {
                                     data.ctime = new Date().getTime();
                                     values.push(data);
-                                    if (values.length > 20) {
+                                    if (values.length > 100) {
                                         upload.uploadServe(roomid, 'laifeng', values);
                                         values = [];
                                     }
