@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS  brief_ingkee_2016_08_01 AS
+SELECT room_id,
+       COUNT(room_id),
+       room_name,
+       owner_uid,
+       nickname,
+       game_name,
+       face,
+       tags,
+       AVG(score) AS score,
+       AVG(fans) AS avgFans,
+       AVG(online) AS avgOnline,
+       MAX(fans) AS maxFans,
+       MAX(online) AS maxOnline,
+       "ingkee" AS platform
+  FROM orignal_ingkee_2016_07_21
+ GROUP BY room_id
+ ORDER BY AVG(score) DESC;
