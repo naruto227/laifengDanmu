@@ -38,7 +38,11 @@ LaiFeng.prototype.start = function () {
         //imk=MTg3ODA1NzgzMy0wLTE0NzQ4NzI3MzQ3NzctMTQ3NDk1OTEzNDc3Nw%3D%3D-E7E65C124EE9B0198EE2AC69BFCD557F
 //imk=MTc2NDgzNjkwNC0wLTE0NzQ4NzI1NzE4MTgtMTQ3NDk1ODk3MTgxOA%3D%3D-1FA9A3F18DD7D3F942C63D5347171C68; Domain=.laifeng.com; Expires=Sun, 21-Sep-2036 06:49:31 GMT; Path=/
 //         token = body.substring(body.indexOf("token") + 7, body.indexOf("token") + 84);
-        token = response.headers["set-cookie"]["8"].substring(4,response.headers["set-cookie"]["8"].indexOf(";")).replace("%3D%3D","==");
+        try {
+            token = response.headers["set-cookie"]["8"].substring(4, response.headers["set-cookie"]["8"].indexOf(";")).replace("%3D%3D", "==");
+        } catch (e) {
+            
+        }
         // token=token.replace("%3D%3D","==");
         touristId = body.substring(body.indexOf("touristId:'") + 11, body.indexOf("touristId:'") + 21);
         // console.log(roomid + ": " + token + ' ' + token.length);
